@@ -9,13 +9,19 @@ def load_aem_points():
 
     with open("data/AusAEM_Year1_NT_Final_CND.dat") as nt_aem_file:
 
-        for l in nt_aem_file.readlines():
+        for idx, l in enumerate(nt_aem_file.readlines()):
+
+            # if idx > 200:
+            #     break
+
             toks = l.split()
             line = int(toks[0])
             lat = float(toks[10])
             lon = float(toks[11])
 
-            pt = (line, lon, lat)
+            cdi_slices = list(map(float, toks[221:]))
+
+            pt = (line, lon, lat, *cdi_slices)
             data_points.append(pt)
 
             lines.add(line)
@@ -25,3 +31,6 @@ def load_aem_points():
 
     return data_points, lines
 
+
+if __name__ == '__main__':
+    load_aem_points()
