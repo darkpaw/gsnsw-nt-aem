@@ -5,26 +5,29 @@
 def load_aem_points():
 
     data_points = []
-    lines = set()
+    survey_lines = set()
 
     with open("data/AusAEM_Year1_NT_Final_CND.dat") as nt_aem_file:
 
-        for idx, l in enumerate(nt_aem_file.readlines()):
+        while True:
+            lines = nt_aem_file.readlines(2**16)
+            if not lines:
+                break
+            print(len(lines), lines[0][:120])
 
-            # if idx > 200:
-            #     break
+            for idx, l in enumerate(lines):
 
-            toks = l.split()
-            line = int(toks[0])
-            lat = float(toks[10])
-            lon = float(toks[11])
+                toks = l.split()
+                line = int(toks[0])
+                lat = float(toks[10])
+                lon = float(toks[11])
 
-            cdi_slices = list(map(float, toks[221:]))
+                cdi_slices = list(map(float, toks[221:]))
 
-            pt = (line, lon, lat, *cdi_slices)
-            data_points.append(pt)
+                pt = (line, lon, lat, *cdi_slices)
+                data_points.append(pt)
 
-            lines.add(line)
+                survey_lines.add(line)
 
     print(len(data_points))
     print(len(lines))
